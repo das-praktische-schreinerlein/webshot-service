@@ -9,6 +9,7 @@
     <version>0.2.0</version>
     <name>Yaio-Webshot-Service</name>
     <description>YourAllInOne WebShot-Service</description>
+    <url>https://github.com/das-praktische-schreinerlein/yaio-webshot-service</url>
     <organization>
         <name>Your-All-In-One</name>
         <url>http://www.your-all-in-one.de</url>
@@ -17,7 +18,7 @@
     <!-- for spring boot -->
     <parent>
         <groupId>de.yaio</groupId>
-        <artifactId>pom-webstarter</artifactId>
+        <artifactId>yaio-pom-webstarter</artifactId>
         <version>0.1.0</version>
     </parent>
 
