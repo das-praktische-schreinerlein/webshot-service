@@ -5,8 +5,8 @@
 
     <!-- the base -->
     <groupId>de.yaio.services</groupId>
-    <artifactId>webshot-service</artifactId>
-    <name>Webshot-Service</name>
+    <artifactId>yaio-webshot-service</artifactId>
+    <name>Yaio-Webshot-Service</name>
     <description>YourAllInOne WebShot-Service</description>
     <organization>
         <name>Your-All-In-One</name>
@@ -52,7 +52,7 @@
 
     <!-- packaging jar or war and version -->
     <packaging>${packaging.type}</packaging>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
         
     
     <!-- for spring boot -->

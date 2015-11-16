@@ -54,13 +54,13 @@ public class WebshotWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Configuration
     @Order(8)
     public static class WebshotServiceSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-        @Value("${webshot.baseurl}")
+        @Value("${yaio-webshot-service.baseurl}")
         protected String webshotBaseUrl;
 
-        @Value("${webshot.security.apiusers.filelocation}")
+        @Value("${yaio-webshot-service.security.apiusers.filelocation}")
         protected String usersFile;
 
-        @Value("${webshot.security.useown}")
+        @Value("${yaio-webshot-service.security.useown}")
         protected Boolean flgSecureByMyOwn;
 
         private CsrfTokenRepository csrfTokenRepository() {

@@ -42,21 +42,21 @@ import org.springframework.stereotype.Service;
 @Service
 class WebshotUtils {
     
-    @Value("${webshot.buffersize}")
+    @Value("${yaio-webshot-service.buffersize}")
     private int BUFFER_SIZE;
 
-    @Value("${webshot.html2pdf.bin}")
+    @Value("${yaio-webshot-service.html2pdf.bin}")
     private String HTML2PDF;
-    @Value("${webshot.html2pdf.defaultoptions}")
+    @Value("${yaio-webshot-service.html2pdf.defaultoptions}")
     private String HTML2PDF_DEFAULTOPTIONS; 
 
-    @Value("${webshot.html2png.bin}")
+    @Value("${yaio-webshot-service.html2png.bin}")
     private String HTML2PNG;
-    @Value("${webshot.html2png.defaultoptions}")
+    @Value("${yaio-webshot-service.html2png.defaultoptions}")
     private String HTML2PNG_DEFAULTOPTIONS; 
 
     public File shotUrl2Pdf(String url) throws IOException {
-        File tmpFile = File.createTempFile("webshot", ".pdf");
+        File tmpFile = File.createTempFile("yaio-webshot-service", ".pdf");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
         String[] baseCommand = concatenate(new String[] {HTML2PDF}, HTML2PDF_DEFAULTOPTIONS.split(" "));
@@ -67,7 +67,7 @@ class WebshotUtils {
     }
 
     public File shotUrl2Png(String url) throws IOException {
-        File tmpFile = File.createTempFile("webshot", ".png");
+        File tmpFile = File.createTempFile("yaio-webshot-service", ".png");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
         String[] baseCommand = concatenate(new String[] {HTML2PNG}, HTML2PNG_DEFAULTOPTIONS.split(" "));

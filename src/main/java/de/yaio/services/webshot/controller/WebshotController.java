@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @Controller
-@RequestMapping("${webshot.baseurl}")
+@RequestMapping("${yaio-webshot-service.baseurl}")
 public class WebshotController {
 
     @Autowired
