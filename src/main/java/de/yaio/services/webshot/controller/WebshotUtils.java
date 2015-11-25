@@ -141,6 +141,7 @@ class WebshotUtils {
         BufferedReader in = new BufferedReader(r);
         while((line = in.readLine()) != null) System.out.println(line);
         in.close();
+        r.close();
     }
 
     static boolean isWindowsSystem() {
