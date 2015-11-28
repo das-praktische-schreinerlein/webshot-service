@@ -13,19 +13,22 @@
  */
 package de.yaio.services.webshot.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.lang.reflect.Array;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.Executor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +44,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 class WebshotUtils {
-    
+
+    @Value("${yaio-webshot-service.timeout}")
+    private int timeout;
+
     @Value("${yaio-webshot-service.buffersize}")
     private int BUFFER_SIZE;
 
@@ -59,10 +65,10 @@ class WebshotUtils {
         File tmpFile = File.createTempFile("yaio-webshot-service", ".pdf");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
-        String[] baseCommand = concatenate(new String[] {HTML2PDF}, HTML2PDF_DEFAULTOPTIONS.split(" "));
-        String[] command = concatenate(baseCommand, new String[]{url, fileName});
+        String[] baseCommand = HTML2PDF_DEFAULTOPTIONS.split(" ");
+        String[] params = concatenate(baseCommand, new String[]{url, fileName});
         System.err.println("start for url:" + url);
-        runCommand(command);
+        runCommand(HTML2PDF, params, timeout * 1000);
         return tmpFile;
     }
 
@@ -70,10 +76,10 @@ class WebshotUtils {
         File tmpFile = File.createTempFile("yaio-webshot-service", ".png");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
-        String[] baseCommand = concatenate(new String[] {HTML2PNG}, HTML2PNG_DEFAULTOPTIONS.split(" "));
-        String[] command = concatenate(baseCommand, new String[]{url, fileName});
+        String[] baseCommand = HTML2PNG_DEFAULTOPTIONS.split(" ");
+        String[] params = concatenate(baseCommand, new String[]{url, fileName});
         System.err.println("start for url:" + url);
-        runCommand(command);
+        runCommand(HTML2PNG, params, timeout * 1000);
         return tmpFile;
     }
 
@@ -117,41 +123,66 @@ class WebshotUtils {
         outStream.close();
     }
 
-    private Integer runCommand(String[] command) throws IOException {
-        if (isWindowsSystem()) {
-            System.err.println("Windows System");
-            runWindowsCommand(command);
+    protected WebShotResultHandler runCommand(final String command,  final String[] params, final long jobTimeout) throws IOException {
+        int exitValue;
+        boolean inBackground = false;
+        ExecuteWatchdog watchdog = null;
+        WebShotResultHandler resultHandler;
+
+        // build up the command line to using a 'java.io.File'
+        final CommandLine commandLine = new CommandLine(command);
+        commandLine.addArguments(params);
+
+        // create the executor and consider the exitValue '1' as success
+        final Executor executor = new DefaultExecutor();
+        executor.setExitValue(0);
+
+        // create a watchdog if requested
+        if (jobTimeout > 0) {
+            watchdog = new ExecuteWatchdog(jobTimeout);
+            executor.setWatchdog(watchdog);
         }
-        else if (isLinuxSystem()) { 
-            System.err.println("Linux System");
-            // exec linux commands ...
+
+        if (inBackground) {
+            System.out.println("[WebShot] Executing non-blocking WebShot job  ...");
+            resultHandler = new WebShotResultHandler(watchdog);
+            executor.execute(commandLine, resultHandler);
+        } else {
+            System.out.println("[WebShot] Executing blocking WebShot job  ...");
+            exitValue = executor.execute(commandLine);
+            resultHandler = new WebShotResultHandler(exitValue);
         }
-        else {
-            System.err.println("Unknown System");
-            System.exit(1);
-        }
-        return 1;
+
+        return resultHandler;
     }
 
-    static void runWindowsCommand(String[] command) throws IOException {
-        System.err.println("Windows command: " + command);
-        String line;
-        Process process = Runtime.getRuntime().exec(command);
-        Reader r = new InputStreamReader(process.getInputStream());
-        BufferedReader in = new BufferedReader(r);
-        while((line = in.readLine()) != null) System.out.println(line);
-        in.close();
-        r.close();
-    }
+    private class WebShotResultHandler extends DefaultExecuteResultHandler {
 
-    static boolean isWindowsSystem() {
-        String osName = System.getProperty("os.name").toLowerCase();
-        return osName.indexOf("windows") >= 0;
-    }
+        private ExecuteWatchdog watchdog;
 
-    static boolean isLinuxSystem() {
-        String osName = System.getProperty("os.name").toLowerCase();
-        return osName.indexOf("linux") >= 0;
+        public WebShotResultHandler(final ExecuteWatchdog watchdog) {
+            this.watchdog = watchdog;
+        }
+
+        public WebShotResultHandler(final int exitValue) {
+            super.onProcessComplete(exitValue);
+        }
+
+        @Override
+        public void onProcessComplete(final int exitValue) {
+            super.onProcessComplete(exitValue);
+            System.out.println("[WebShotResultHandler] The document was successfully shot ...");
+        }
+
+        @Override
+        public void onProcessFailed(final ExecuteException e) {
+            super.onProcessFailed(e);
+            if (watchdog != null && watchdog.killedProcess()) {
+                System.err.println("[WebShotResultHandler] The shot process timed out");
+            } else {
+                System.err.println("[WebShotResultHandler] The shot process failed to do : " + e.getMessage());
+            }
+        }
     }
 
     private static <T> T[] concatenate(T[] a, T[] b) {
