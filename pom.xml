@@ -6,7 +6,7 @@
     <!-- the base -->
     <groupId>de.yaio.services</groupId>
     <artifactId>yaio-webshot-service</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <name>Yaio-Webshot-Service</name>
     <description>YourAllInOne WebShot-Service</description>
     <url>https://github.com/das-praktische-schreinerlein/yaio-webshot-service</url>
