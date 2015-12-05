@@ -29,8 +29,8 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
-import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,9 +80,9 @@ class WebshotProvider {
         if (!getNetFirewall().isUrlAllowed(url)) {
             LOGGER.warn("illegal request for url:" + url 
                             + " disallowed by NetFirewall:" 
-                            + new ReflectionToStringBuilder(getNetFirewall(), new RecursiveToStringStyle()).toString()
+                            + new ReflectionToStringBuilder(getNetFirewall(), ToStringStyle.SHORT_PREFIX_STYLE).toString()
                             + " with config:" 
-                            + new ReflectionToStringBuilder(firewallConfig, new RecursiveToStringStyle()).toString());
+                            + new ReflectionToStringBuilder(firewallConfig, ToStringStyle.SHORT_PREFIX_STYLE).toString());
             throw new IOException("illegal request for url:" + url 
                             + " disallowed by NetFirewall");
         }
@@ -103,9 +103,9 @@ class WebshotProvider {
         if (!getNetFirewall().isUrlAllowed(url)) {
             LOGGER.warn("illegal request for url:" + url 
                             + " disallowed by NetFirewall:" 
-                            + new ReflectionToStringBuilder(getNetFirewall(), new RecursiveToStringStyle()).toString()
+                            + new ReflectionToStringBuilder(getNetFirewall(), ToStringStyle.SHORT_PREFIX_STYLE).toString()
                             + " with config:" 
-                            + new ReflectionToStringBuilder(firewallConfig, new RecursiveToStringStyle()).toString());
+                            + new ReflectionToStringBuilder(firewallConfig, ToStringStyle.SHORT_PREFIX_STYLE).toString());
             throw new IOException("illegal request for url:" + url 
                             + " disallowed by NetFirewall");
         }
@@ -179,7 +179,7 @@ class WebshotProvider {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start command " + command 
                         + " with params" + new ReflectionToStringBuilder(
-                                        params, new RecursiveToStringStyle()).toString());
+                                        params, ToStringStyle.SHORT_PREFIX_STYLE).toString());
         }
 
         // create the executor and consider the exitValue '1' as success
