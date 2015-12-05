@@ -14,6 +14,7 @@
 package de.yaio.services.webshot.controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,17 +54,20 @@ public class WebshotController {
      * @param url                    the url to shot
      * @param request                the request-obj to get the servlet-context 
      * @param response               the response-Obj to set contenttype and headers
+     * @throws IOException           possible
      */
     @RequestMapping(method = RequestMethod.POST, 
                     value = "/url2pdf",
                     produces = "application/pdf")
     public @ResponseBody void shotUrl2Pdf(@RequestParam(value="url", required=true) String url,
-                                          HttpServletRequest request, HttpServletResponse response) {
+                                          HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             File tmpFile = converterUtils.shotUrl2Pdf(url);
             converterUtils.downloadResultFile(request, response, tmpFile);
         } catch (Exception e) {
             LOGGER.warn("exception start for url:" + url, e);
+            response.setStatus(404);
+            response.getWriter().append("error while reading:" + e.getMessage());
         }
     }
     
@@ -75,17 +79,20 @@ public class WebshotController {
      * @param url                    the url to shot
      * @param request                the request-obj to get the servlet-context 
      * @param response               the response-Obj to set contenttype and headers
+     * @throws IOException           possible
      */
     @RequestMapping(method = RequestMethod.POST, 
                     value = "/url2png",
                     produces = "image/png")
     public @ResponseBody void shotUrl2Png(@RequestParam(value="url", required=true) String url,
-                                          HttpServletRequest request, HttpServletResponse response) {
+                                          HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             File tmpFile = converterUtils.shotUrl2Png(url);
             converterUtils.downloadResultFile(request, response, tmpFile);
         } catch (Exception e) {
             LOGGER.warn("exception start for url:" + url, e);
+            response.setStatus(404);
+            response.getWriter().append("error while reading:" + e.getMessage());
         }
     }
     
