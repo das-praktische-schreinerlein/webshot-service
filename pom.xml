@@ -6,7 +6,7 @@
     <!-- the base -->
     <groupId>de.yaio.services</groupId>
     <artifactId>yaio-webshot-service</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <name>Yaio-Webshot-Service</name>
     <description>YourAllInOne WebShot-Service</description>
     <url>https://github.com/das-praktische-schreinerlein/yaio-webshot-service</url>
@@ -44,6 +44,11 @@
          -->
         <!--  project -->
         <start-class>de.yaio.services.webshot.WebshotApplication</start-class>
+
+        <commons-exec.version>1.3</commons-exec.version>
+
+        <!-- Yaio versions -->
+        <yaio-commons.version>0.1.0</yaio-commons.version>
     </properties>
 
 
@@ -54,7 +59,17 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-exec</artifactId>
-            <version>1.3</version>
+            <version>${commons-exec.version}</version>
+        </dependency>
+
+        <!-- yaio-services / via jitpack.io because of no maven-centra-account -->
+        <dependency>
+            <groupId>de.yaio</groupId>
+            <!-- 
+            <groupId>com.github.das-praktische-schreinerlein</groupId>
+             -->
+            <artifactId>yaio-commons</artifactId>
+            <version>${yaio-commons.version}</version>
         </dependency>
     </dependencies>
 

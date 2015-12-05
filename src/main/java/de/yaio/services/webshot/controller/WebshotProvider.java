@@ -29,21 +29,29 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
+import org.apache.commons.lang3.builder.RecursiveToStringStyle;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import de.yaio.commons.net.NetFirewall;
+import de.yaio.commons.net.NetFirewallFactory;
 
 /** 
  * services to create webshots
  *  
  * @FeatureDomain                service
- * @package                      de.yaio.services.plantuml.controller
+ * @package                      de.yaio.services.webshot.controller
  * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @category                     diagram-services
+ * @category                     webshot-services
  * @copyright                    Copyright (c) 2014, Michael Schreiner
  * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @Service
-class WebshotUtils {
+class WebshotProvider {
+    private static final Logger LOGGER = Logger.getLogger(WebshotProvider.class);
 
     @Value("${yaio-webshot-service.timeout}")
     private int timeout;
@@ -61,30 +69,61 @@ class WebshotUtils {
     @Value("${yaio-webshot-service.html2png.defaultoptions}")
     private String HTML2PNG_DEFAULTOPTIONS; 
 
+    @Autowired
+    protected WebShotFirewallConfig firewallConfig;
+    
+    protected NetFirewall netFirewall;
+    
     public File shotUrl2Pdf(String url) throws IOException {
+        LOGGER.info("start shotUrl2Pdf for url:" + url);
+        // check url
+        if (!getNetFirewall().isUrlAllowed(url)) {
+            LOGGER.warn("illegal request for url:" + url 
+                            + " disallowed by NetFirewall:" 
+                            + new ReflectionToStringBuilder(getNetFirewall(), new RecursiveToStringStyle()).toString()
+                            + " with config:" 
+                            + new ReflectionToStringBuilder(firewallConfig, new RecursiveToStringStyle()).toString());
+            throw new IOException("illegal request for url:" + url 
+                            + " disallowed by NetFirewall");
+        }
+
         File tmpFile = File.createTempFile("yaio-webshot-service", ".pdf");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
         String[] baseCommand = HTML2PDF_DEFAULTOPTIONS.split(" ");
         String[] params = concatenate(baseCommand, new String[]{url, fileName});
-        System.err.println("start for url:" + url);
+        
         runCommand(HTML2PDF, params, timeout * 1000);
         return tmpFile;
     }
 
     public File shotUrl2Png(String url) throws IOException {
+        LOGGER.info("start shotUrl2Png for url:" + url);
+        // check url
+        if (!getNetFirewall().isUrlAllowed(url)) {
+            LOGGER.warn("illegal request for url:" + url 
+                            + " disallowed by NetFirewall:" 
+                            + new ReflectionToStringBuilder(getNetFirewall(), new RecursiveToStringStyle()).toString()
+                            + " with config:" 
+                            + new ReflectionToStringBuilder(firewallConfig, new RecursiveToStringStyle()).toString());
+            throw new IOException("illegal request for url:" + url 
+                            + " disallowed by NetFirewall");
+        }
+        
+
         File tmpFile = File.createTempFile("yaio-webshot-service", ".png");
         tmpFile.deleteOnExit();
         String fileName = tmpFile.getAbsolutePath();
         String[] baseCommand = HTML2PNG_DEFAULTOPTIONS.split(" ");
         String[] params = concatenate(baseCommand, new String[]{url, fileName});
-        System.err.println("start for url:" + url);
+
         runCommand(HTML2PNG, params, timeout * 1000);
         return tmpFile;
     }
 
     public void downloadResultFile(HttpServletRequest request,
-                                   HttpServletResponse response, File downloadFile) throws IOException {
+                                   HttpServletResponse response, 
+                                   File downloadFile) throws IOException {
         // construct the complete absolute path of the file
         FileInputStream inputStream = new FileInputStream(downloadFile);
 
@@ -96,7 +135,9 @@ class WebshotUtils {
             // set to binary type if MIME mapping not found
             mimeType = "application/octet-stream";
         }
-        System.err.println("MIME type: " + mimeType);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("MIME type: " + mimeType);
+        }
 
         // set content attributes for the response
         response.setContentType(mimeType);
@@ -123,7 +164,9 @@ class WebshotUtils {
         outStream.close();
     }
 
-    protected WebShotResultHandler runCommand(final String command,  final String[] params, final long jobTimeout) throws IOException {
+    protected WebShotResultHandler runCommand(final String command, 
+                                              final String[] params, 
+                                              final long jobTimeout) throws IOException {
         int exitValue;
         boolean inBackground = false;
         ExecuteWatchdog watchdog = null;
@@ -132,6 +175,12 @@ class WebshotUtils {
         // build up the command line to using a 'java.io.File'
         final CommandLine commandLine = new CommandLine(command);
         commandLine.addArguments(params);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("start command " + command 
+                        + " with params" + new ReflectionToStringBuilder(
+                                        params, new RecursiveToStringStyle()).toString());
+        }
 
         // create the executor and consider the exitValue '1' as success
         final Executor executor = new DefaultExecutor();
@@ -144,11 +193,15 @@ class WebshotUtils {
         }
 
         if (inBackground) {
-            System.out.println("[WebShot] Executing non-blocking WebShot job  ...");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("[WebShot] Executing non-blocking WebShot job  ...");
+            }
             resultHandler = new WebShotResultHandler(watchdog);
             executor.execute(commandLine, resultHandler);
         } else {
-            System.out.println("[WebShot] Executing blocking WebShot job  ...");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("[WebShot] Executing blocking WebShot job  ...");
+            }
             exitValue = executor.execute(commandLine);
             resultHandler = new WebShotResultHandler(exitValue);
         }
@@ -171,18 +224,25 @@ class WebshotUtils {
         @Override
         public void onProcessComplete(final int exitValue) {
             super.onProcessComplete(exitValue);
-            System.out.println("[WebShotResultHandler] The document was successfully shot ...");
+            LOGGER.info("[WebShotResultHandler] The document was successfully shot ...");
         }
 
         @Override
         public void onProcessFailed(final ExecuteException e) {
             super.onProcessFailed(e);
             if (watchdog != null && watchdog.killedProcess()) {
-                System.err.println("[WebShotResultHandler] The shot process timed out");
+                LOGGER.warn("[WebShotResultHandler] The shot process timed out");
             } else {
-                System.err.println("[WebShotResultHandler] The shot process failed to do : " + e.getMessage());
+                LOGGER.warn("[WebShotResultHandler] The shot process failed to do : " + e.getMessage());
             }
         }
+    }
+
+    protected NetFirewall getNetFirewall() {
+        if (netFirewall == null) {
+            netFirewall = NetFirewallFactory.creatNetFirewall(firewallConfig);
+        }
+        return netFirewall;
     }
 
     private static <T> T[] concatenate(T[] a, T[] b) {
