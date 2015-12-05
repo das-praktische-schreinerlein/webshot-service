@@ -18,6 +18,7 @@ import java.io.File;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +40,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("${yaio-webshot-service.baseurl}")
 public class WebshotController {
 
+    private static final Logger LOGGER = Logger.getLogger(WebshotController.class);
+
     @Autowired
-    protected WebshotUtils converterUtils;
+    protected WebshotProvider converterUtils;
 
     /** 
      * Request to generate pdf-webshot for url
@@ -60,8 +63,7 @@ public class WebshotController {
             File tmpFile = converterUtils.shotUrl2Pdf(url);
             converterUtils.downloadResultFile(request, response, tmpFile);
         } catch (Exception e) {
-            System.err.println("exception start for url:" + url + " ex:" + e);
-            e.printStackTrace();
+            LOGGER.warn("exception start for url:" + url, e);
         }
     }
     
@@ -83,8 +85,7 @@ public class WebshotController {
             File tmpFile = converterUtils.shotUrl2Png(url);
             converterUtils.downloadResultFile(request, response, tmpFile);
         } catch (Exception e) {
-            System.err.println("exception start for url:" + url + " ex:" + e);
-            e.printStackTrace();
+            LOGGER.warn("exception start for url:" + url, e);
         }
     }
     
