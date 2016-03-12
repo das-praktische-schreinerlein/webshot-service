@@ -32,13 +32,6 @@ import org.springframework.stereotype.Component;
 
 /** 
  * secure the webshot-service
- *  
- * @FeatureDomain                Config
- * @package                      de.yaio.services.webshot
- * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @category                     WebSecurityConfig
- * @copyright                    Copyright (c) 2014, Michael Schreiner
- * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @EnableWebSecurity
 @Component

@@ -29,13 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /** 
  * controller with Webshot-Services to create and download a webshot of a webpage
- *  
- * @FeatureDomain                Webservice
- * @package                      de.yaio.services.plantuml.controller
- * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @category                     diagram-services
- * @copyright                    Copyright (c) 2014, Michael Schreiner
- * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @Controller
 @RequestMapping("${yaio-webshot-service.baseurl}")
@@ -48,9 +41,6 @@ public class WebshotController {
 
     /** 
      * Request to generate pdf-webshot for url
-     * @FeatureDomain                Webservice
-     * @FeatureResult                send image of the webpage via HttpServletResponse
-     * @FeatureKeywords              Webservice
      * @param url                    the url to shot
      * @param request                the request-obj to get the servlet-context 
      * @param response               the response-Obj to set contenttype and headers
@@ -73,9 +63,6 @@ public class WebshotController {
     
     /** 
      * Request to generate png-webshot for url
-     * @FeatureDomain                Webservice
-     * @FeatureResult                send image of the webpage via HttpServletResponse
-     * @FeatureKeywords              Webservice
      * @param url                    the url to shot
      * @param request                the request-obj to get the servlet-context 
      * @param response               the response-Obj to set contenttype and headers

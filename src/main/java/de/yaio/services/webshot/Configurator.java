@@ -22,16 +22,6 @@ import org.apache.log4j.Logger;
 
 /** 
  * baseclass for configuration
- *
- * @FeatureDomain                Configuration
- * @package                      de.yaio.services.webshot
- * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @copyright                    Copyright (c) 2013, Michael Schreiner
- * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 public class Configurator {
 
@@ -57,9 +47,6 @@ public class Configurator {
     
     /** 
      * return the current static Configurator-instance
-     * @FeatureDomain                Configuration
-     * @FeatureResult                returnValue the current Configurator-instance for the app
-     * @FeatureKeywords              Configuration CLI-Handling
      * @return                       the current Configurator-instance
      * @throws Exception             parse/io-Exceptions possible
      */
@@ -79,9 +66,6 @@ public class Configurator {
     /** 
      * read the properties from the given filepath (first by filesystem, 
      * if failed by classpath)
-     * @FeatureDomain                Configuration
-     * @FeatureResult                returnValue Properties - the properties read from propertyfile
-     * @FeatureKeywords              Configuration
      * @param filePath               path to the file (filesystem or classressource)
      * @return                       the properties read from propertyfile
      * @throws Exception             parse/io-Exceptions possible

@@ -41,13 +41,6 @@ import de.yaio.commons.net.NetFirewallFactory;
 
 /** 
  * services to create webshots
- *  
- * @FeatureDomain                service
- * @package                      de.yaio.services.webshot.controller
- * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @category                     webshot-services
- * @copyright                    Copyright (c) 2014, Michael Schreiner
- * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @Service
 class WebshotProvider {

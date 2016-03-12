@@ -21,13 +21,6 @@ import de.yaio.commons.net.NetFirewallConfig;
 
 /** 
  * config for NetFirewall
- * 
- * @FeatureDomain                Utils
- * @package                      de.yaio.services.webshot.controller
- * @author                       Michael Schreiner <michael.schreiner@your-it-fellow.de>
- * @category                     collaboration
- * @copyright                    Copyright (c) 2014, Michael Schreiner
- * @license                      http://mozilla.org/MPL/2.0/ Mozilla Public License 2.0
  */
 @Component
 @ConfigurationProperties(prefix = "yaio-webshot-service.downloadfirewall")
