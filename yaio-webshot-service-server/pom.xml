@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.yaio.services</groupId>
+        <artifactId>yaio-webshot-service-pom-springboot-web</artifactId>
+        <version>0.6.0-SNAPSHOT</version>
+        <relativePath>../yaio-webshot-service-pom-springboot-web/pom.xml</relativePath>
+    </parent>
+
+    <!-- the base -->
+    <groupId>de.yaio.services</groupId>
+    <artifactId>yaio-webshot-service-server</artifactId>
+    <version>0.6.0-SNAPSHOT</version>
+    <name>yaio-webshot-service-server</name>
+    <description>a POM for server</description>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>${commons-exec.version}</version>
+        </dependency>
+
+        <!-- yaio-services / via jitpack.io because of no maven-centra-account -->
+        <dependency>
+            <groupId>de.yaio</groupId>
+            <!--
+            <groupId>com.github.das-praktische-schreinerlein</groupId>
+             -->
+            <artifactId>yaio-commons</artifactId>
+            <version>${yaio-commons.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,8 @@
+/*/target
+/.settings
+/.project
+/.springBeans
+dependency-reduced-pom.xml
+/.idea/
+*.iml
+/dist/
