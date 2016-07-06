@@ -75,7 +75,7 @@
          -->
 
         <!-- Yaio versions -->
-        <yaio-commons.version>[0.3.0,0.4.0)</yaio-commons.version>
+        <yaio-commons.version>[0.4.0-SNAPSHOT,0.5.0)</yaio-commons.version>
 
 
         <!--  versions -->

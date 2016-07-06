@@ -15,6 +15,8 @@ package de.yaio.services.webshot.server.configuration;
 
 import java.util.Properties;
 
+import de.yaio.commons.io.IOExceptionWithCause;
+import de.yaio.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,7 +69,12 @@ public class WebshotWebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
             
             // secure it by my own
-            Properties users = Configurator.readProperties(usersFile);
+            Properties users;
+            try {
+                users = IOUtils.getInstance().readProperties(usersFile);
+            } catch (IOExceptionWithCause ex) {
+                throw new IllegalArgumentException("cant read propertyFile for AuthenticationManager", ex);
+            }
             InMemoryUserDetailsManager im = new InMemoryUserDetailsManager(users);
             auth.userDetailsService(im);
         }

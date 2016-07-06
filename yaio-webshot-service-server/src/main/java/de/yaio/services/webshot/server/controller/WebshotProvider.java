@@ -18,11 +18,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import de.yaio.commons.io.IOExceptionWithCause;
+import de.yaio.commons.net.PermissionException;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
@@ -67,18 +71,9 @@ class WebshotProvider {
     
     protected NetFirewall netFirewall;
     
-    public File shotUrl2Pdf(String url) throws IOException {
+    public File shotUrl2Pdf(String url) throws PermissionException, IOExceptionWithCause, IOException {
         LOGGER.info("start shotUrl2Pdf for url:" + url);
-        // check url
-        if (!getNetFirewall().isUrlAllowed(url)) {
-            LOGGER.warn("illegal request for url:" + url 
-                            + " disallowed by NetFirewall:" 
-                            + new ReflectionToStringBuilder(getNetFirewall(), ToStringStyle.SHORT_PREFIX_STYLE).toString()
-                            + " with config:" 
-                            + new ReflectionToStringBuilder(firewallConfig, ToStringStyle.SHORT_PREFIX_STYLE).toString());
-            throw new IOException("illegal request for url:" + url 
-                            + " disallowed by NetFirewall");
-        }
+        getNetFirewall().throwExceptionIfNotAllowed(url);
 
         File tmpFile = File.createTempFile("yaio-webshot-service", ".pdf");
         tmpFile.deleteOnExit();
@@ -90,19 +85,9 @@ class WebshotProvider {
         return tmpFile;
     }
 
-    public File shotUrl2Png(String url) throws IOException {
+    public File shotUrl2Png(String url) throws PermissionException, IOExceptionWithCause, IOException {
         LOGGER.info("start shotUrl2Png for url:" + url);
-        // check url
-        if (!getNetFirewall().isUrlAllowed(url)) {
-            LOGGER.warn("illegal request for url:" + url 
-                            + " disallowed by NetFirewall:" 
-                            + new ReflectionToStringBuilder(getNetFirewall(), ToStringStyle.SHORT_PREFIX_STYLE).toString()
-                            + " with config:" 
-                            + new ReflectionToStringBuilder(firewallConfig, ToStringStyle.SHORT_PREFIX_STYLE).toString());
-            throw new IOException("illegal request for url:" + url 
-                            + " disallowed by NetFirewall");
-        }
-        
+        getNetFirewall().throwExceptionIfNotAllowed(url);
 
         File tmpFile = File.createTempFile("yaio-webshot-service", ".png");
         tmpFile.deleteOnExit();

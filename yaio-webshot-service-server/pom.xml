@@ -34,9 +34,6 @@
         <!-- yaio-services / via jitpack.io because of no maven-centra-account -->
         <dependency>
             <groupId>de.yaio</groupId>
-            <!--
-            <groupId>com.github.das-praktische-schreinerlein</groupId>
-             -->
             <artifactId>yaio-commons</artifactId>
             <version>${yaio-commons.version}</version>
         </dependency>
