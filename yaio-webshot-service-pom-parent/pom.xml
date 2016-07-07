@@ -63,12 +63,6 @@
         <!--  versions -->
         <java.version>1.7</java.version>
 
-        <yaio-webshot-service-pom-parent.version>0.6.0-SNAPSHOT</yaio-webshot-service-pom-parent.version>
-        <yaio-webshot-service-client.version>0.6.0-SNAPSHOT</yaio-webshot-service-client.version>
-        <yaio-webshot-service-pom-springboot.version>0.6.0-SNAPSHOT</yaio-webshot-service-pom-springboot.version>
-        <yaio-webshot-service-pom-springboot-web.version>0.6.0-SNAPSHOT</yaio-webshot-service-pom-springboot-web.version>
-        <yaio-webshot-service-server.version>0.6.0-SNAPSHOT</yaio-webshot-service-server.version>
-
         <!--
           ##################
           # dependency versions
