@@ -41,6 +41,10 @@ public class WebshotClient {
         this.webshotpassword = webshotpassword;
     }
 
+    public enum FORMAT {
+        PNG, PDF
+    };
+
     public static WebshotClient createClient(final String webshoturl, final String webshotusername,
                                final String webshotpassword) {
         if (StringUtils.isEmpty(webshoturl)) {
@@ -62,12 +66,22 @@ public class WebshotClient {
      * @throws IOException           if something went wrong
      */
     public byte[] getWebShotFromUrl(final String url) throws IOExceptionWithCause, IOException {
+        return getWebShotFromUrl(url, FORMAT.PNG);
+    }
+
+    /**
+     * create a webshot of the url
+     * @return                       returns the webshot as png-file
+     * @param url                    url to make a webshot from
+     * @throws IOException           if something went wrong
+     */
+    public byte[] getWebShotFromUrl(final String url, final FORMAT format) throws IOExceptionWithCause, IOException {
         // get image from url
         Map<String, String> params = new HashMap<String, String>();
         params.put("url", url);
 
         // call url
-        String baseUrl = webshoturl + "/url2png";
+        String baseUrl = webshoturl + "/url2" + format;
         HttpEntity entity;
         HttpResponse response;
         try {
