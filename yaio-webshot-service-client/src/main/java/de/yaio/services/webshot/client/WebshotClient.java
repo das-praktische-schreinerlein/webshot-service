@@ -63,7 +63,8 @@ public class WebshotClient {
      * create a webshot of the url
      * @return                       returns the webshot as png-file
      * @param url                    url to make a webshot from
-     * @throws IOException           if something went wrong
+     * @throws IOExceptionWithCause  if something logical went wrong
+     * @throws IOException           if something physical went wrong
      */
     public byte[] getWebShotFromUrl(final String url) throws IOExceptionWithCause, IOException {
         return getWebShotFromUrl(url, FORMAT.png);
@@ -73,7 +74,9 @@ public class WebshotClient {
      * create a webshot of the url
      * @return                       returns the webshot as png-file
      * @param url                    url to make a webshot from
-     * @throws IOException           if something went wrong
+     * @param format                 format of the webshot
+     * @throws IOExceptionWithCause  if something logical went wrong
+     * @throws IOException           if something physical went wrong
      */
     public byte[] getWebShotFromUrl(final String url, final FORMAT format) throws IOExceptionWithCause, IOException {
         // get image from url
