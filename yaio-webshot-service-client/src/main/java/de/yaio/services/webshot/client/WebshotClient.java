@@ -42,7 +42,7 @@ public class WebshotClient {
     }
 
     public enum FORMAT {
-        PNG, PDF
+        png, pdf
     };
 
     public static WebshotClient createClient(final String webshoturl, final String webshotusername,
@@ -66,7 +66,7 @@ public class WebshotClient {
      * @throws IOException           if something went wrong
      */
     public byte[] getWebShotFromUrl(final String url) throws IOExceptionWithCause, IOException {
-        return getWebShotFromUrl(url, FORMAT.PNG);
+        return getWebShotFromUrl(url, FORMAT.png);
     }
 
     /**
