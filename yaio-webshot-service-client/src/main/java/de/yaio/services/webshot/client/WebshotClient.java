@@ -87,13 +87,8 @@ public class WebshotClient {
         String baseUrl = webshoturl + "/url2" + format;
         HttpEntity entity;
         HttpResponse response;
-        try {
-            response = HttpUtils.callPostUrlPure(baseUrl,
-                    webshotusername, webshotpassword, params, null, null);
-            entity = response.getEntity();
-        } catch (IOException ex) {
-            throw new IOExceptionWithCause("error while calling webshot for url", url, ex);
-        }
+        response = HttpUtils.callPostUrlPure(baseUrl, webshotusername, webshotpassword, params, null, null);
+        entity = response.getEntity();
 
         // check response
         int retCode = response.getStatusLine().getStatusCode();
