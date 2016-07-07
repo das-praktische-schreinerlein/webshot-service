@@ -26,6 +26,7 @@
 
     <modules>
         <module>yaio-webshot-service-pom-parent</module>
+        <module>yaio-webshot-service-client</module>
         <module>yaio-webshot-service-pom-springboot</module>
         <module>yaio-webshot-service-pom-springboot-web</module>
         <module>yaio-webshot-service-server</module>
