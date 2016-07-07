@@ -6,14 +6,14 @@
     <parent>
         <groupId>de.yaio.services</groupId>
         <artifactId>yaio-webshot-service</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.6.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <!-- the base -->
     <groupId>de.yaio.services</groupId>
     <artifactId>yaio-webshot-service-pom-parent</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
+    <version>0.6.0</version>
     <name>yaio-webshot-service-pom-parent</name>
     <description>a POM for yaio-apps</description>
     <url>https://github.com/das-praktische-schreinerlein/yaio</url>
