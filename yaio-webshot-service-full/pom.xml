@@ -6,14 +6,14 @@
     <parent>
         <groupId>de.yaio.services</groupId>
         <artifactId>yaio-webshot-service-pom-springboot-web</artifactId>
-        <version>0.6.0</version>
+        <version>0.6.1-RELEASE</version>
         <relativePath>../yaio-webshot-service-pom-springboot-web/pom.xml</relativePath>
     </parent>
 
     <!-- the base -->
     <groupId>de.yaio.services</groupId>
     <artifactId>yaio-webshot-service-full</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1-RELEASE</version>
     <name>yaio-webshot-service-full</name>
     <description>the full service</description>
 
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>de.yaio.services</groupId>
             <artifactId>yaio-webshot-service-server</artifactId>
-            <version>0.6.0</version>
+            <version>0.6.1-RELEASE</version>
         </dependency>
     </dependencies>
 
@@ -88,7 +88,7 @@
                 <executions>
                     <execution>
                         <id>copy-jar</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <configuration>
                             <target>
                                 <copy file="${yaioBaseDir}/${project.artifactId}/target/${project.artifactId}-${project.version}.jar" tofile="${yaioBaseDir}/dist/${project.artifactId}-${project.version}.jar" />
